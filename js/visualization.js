@@ -34,7 +34,8 @@
       .attr('y', (cellRow * cell.height) + 60)
       .attr('font-family', 'Gill Sans')
       .style('font-size', 13)
-      .text('Patient ' + (cellNum + 1));
+      .text('Patient ' + (cellNum + 1))
+      
       /* .on('click', function () {
         d3.csv(path).then(lineChart).then(makeTitle(cellNum + 1));
       }); */
@@ -97,14 +98,16 @@
     // Shows time and converts to a scale of months
     svg1.append("g")
       .attr("transform", `translate(0, ${200})`)
-      .call(d3.axisBottom(x).ticks(6).tickFormat(x => toMonthName(x.getMonth() + 1)));
+      .call(d3.axisBottom(x).ticks(6).tickFormat(x => toMonthName(x.getMonth() + 1)))
+      .attr('font-size', 5);
 
     // Add Y axis
     const y = d3.scaleLinear()
       .domain([0, d3.max(data, function (d) { return +d.MeasureValue; })])
       .range([200, 50]);
     svg1.append("g")
-      .call(d3.axisLeft(y));
+      .call(d3.axisLeft(y))
+      .attr('font-size', 5);;
 
     // Color selection
     const color = d3.scaleOrdinal()
@@ -116,13 +119,28 @@
       .join("path")
       .attr("fill", "none")
       .attr("stroke", function (d) { return color(d[0]) })
-      .attr("stroke-width", 1.5)
+      .attr("stroke-width", 1)
       .attr("d", function (d) {
         return d3.line()
           .x(function (d) { return x(parseDate(d.Time)); })
           .y(function (d) { return y(+d.MeasureValue); })
           (d[1])
       })
+
+    // Data dots
+    svg1
+      .append("g")
+      .selectAll("dot")
+      .data(data)
+      .enter()
+      .append("circle")
+        .attr("r", 1)
+        .attr("fill", "black")
+        .attr("cx", function(d) { return x(parseDate(d.Time)) } )
+        .attr("cy", function(d) { return y(d.MeasureValue) })
+        .append("title")
+        .text(function(d) { return parseDate(d.Time) + ", " + d.MeasureValue; });
+        
 
     // Y axis label rotated
     svg1.append("text")
