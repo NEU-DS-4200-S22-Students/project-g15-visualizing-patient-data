@@ -35,10 +35,10 @@
       .attr('font-family', 'Gill Sans')
       .style('font-size', 13)
       .text('Patient ' + (cellNum + 1))
-      
-      /* .on('click', function () {
-        d3.csv(path).then(lineChart).then(makeTitle(cellNum + 1));
-      }); */
+
+    /* .on('click', function () {
+      d3.csv(path).then(lineChart).then(makeTitle(cellNum + 1));
+    }); */
   }
 
   // change paths for each patient
@@ -134,13 +134,42 @@
       .data(data)
       .enter()
       .append("circle")
-        .attr("r", 1)
-        .attr("fill", "black")
-        .attr("cx", function(d) { return x(parseDate(d.Time)) } )
-        .attr("cy", function(d) { return y(d.MeasureValue) })
-        .append("title")
-        .text(function(d) { return parseDate(d.Time) + ", " + d.MeasureValue; });
-        
+      .attr("r", 1.1)
+      .attr("fill", function (d) {
+        if (d.MeasureName == 'weight') {
+          return color1;
+        }
+        else if (d.MeasureName == 'blood_pressure_systolic') {
+          return color2;
+        }
+        else if (d.MeasureName == 'blood_pressure_diastolic') {
+          return color3;
+        }
+        else if (d.MeasureName == 'pulse') {
+          return color4;
+        }
+      })
+      .attr("cx", function (d) { return x(parseDate(d.Time)) })
+      .attr("cy", function (d) { return y(d.MeasureValue) })
+      .on("mouseover", function (event, d) {
+        div.transition()
+          .duration(200)
+          .style("opacity", .9);
+        div.html(toMonthName(parseDate(d.Time).getMonth() + 1) + "<br/>" + d.MeasureValue)
+          .style("left", (event.pageX) + "px")
+          .style("top", (event.pageY - 28) + "px");
+      })
+      .on("mouseout", function (d) {
+        div.transition()
+          .duration(500)
+          .style("opacity", 0);
+      });
+
+    // creating a div for the tooltip
+    var div = d3.select("body").append("div")
+      .attr("class", "tooltip")
+      .style("opacity", 0);
+
 
     // Y axis label rotated
     svg1.append("text")
