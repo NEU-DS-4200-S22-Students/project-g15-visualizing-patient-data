@@ -43,10 +43,10 @@
 
   // change paths for each patient
   makeCell(1, 0, "#FF0000", "data/patient1.csv");
-  makeCell(1, 1, "#CEFF00", "data/patient1.csv");
-  makeCell(1, 2, "#FF9600", "data/patient1.csv");
-  makeCell(1, 3, "#9BFF00", "data/patient1.csv");
-  makeCell(1, 4, "#FF4900", "data/patient1.csv");
+  makeCell(1, 1, "#CEFF00", "data/patient2.csv");
+  makeCell(1, 2, "#FF9600", "data/patient3.csv");
+  makeCell(1, 3, "#9BFF00", "data/patient4.csv");
+  makeCell(1, 4, "#FF4900", "data/patient5.csv");
 
 
   let margin = {
@@ -58,10 +58,10 @@
     width = 500 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
 
-  let color1 = "#e41a1c";
-  let color2 = "#377eb8";
-  let color3 = "#FD7F20";
-  let color4 = "#00FF00";
+  let color1 = "#0095CE";
+  let color2 = "#C60095";
+  let color3 = "#FF8980";
+  let color4 = "#888888";
 
 
   let parseDate = d3.utcParse("%Y-%m-%dT%H:%M:%S.%LZ");
@@ -76,7 +76,7 @@
   //Read the data
   // d3.csv("data/patient1.csv").then(lineChart)
 
-  function lineChart(data, patient) {
+  function lineChart(data) {
 
     // Sort the lines by type of measurement
     const sumstat = d3.group(data, d => d.MeasureName);
@@ -84,7 +84,7 @@
     // Add X axis 
     const x = d3.scaleTime()
       .domain(d3.extent(data, function (d) { return parseDate(d.Time); }))
-      .range([0, 200]);
+      .range([0, 300]);
 
     function toMonthName(monthNumber) {
       const date = new Date();
@@ -181,8 +181,8 @@
 
     // Y axis label rotated
     svg1.append("text")
-      .attr("x", 70)
-      .attr('y', 240)
+      .attr("x", 130)
+      .attr('y', 230)
       .text("Date")
       .style('font-size', '15px')
   }
@@ -191,10 +191,17 @@
     // CLEARS ENTIRE GRAPH
     svg1.selectAll("*").remove();
     // Title of Chart
+    svg1.append('rect')
+      .attr('x', margin.right - 10)
+      .attr('y', 16)
+      .attr('height', 25)
+      .attr('width', 140)
+      .style('fill', '#D3D3D3')
+      .style("stroke", "black")
     svg1
       .append('text')
       .attr('x', margin.right)
-      .attr('y', 40)
+      .attr('y', 35)
       .style('fill', 'black')
       .text('Patient ' + patient + ' Vitals');
   }
@@ -252,7 +259,7 @@
 
   // Controls where the legend is located on the page
   let legend = {
-    x: 550,
+    x: 750,
     y: 200
   }
 
