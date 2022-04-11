@@ -98,6 +98,9 @@
       .range([0, 300]);
 
 
+    months = d3.extent(data, function (d) { return parseDate(d.Time); });
+    numMonths = (months[1].getMonth() - months[0].getMonth() + (months[1].getFullYear() - months[0].getFullYear()) * 12) + 1;
+
     function toYear(yearNumber) {
       const date = new Date();
       date.setFullYear(yearNumber);
@@ -139,14 +142,12 @@
 
     }
 
-    function findTicks() {
-      
-    }
-
     // Shows time and converts to a scale of months
     svg1.append("g")
       .attr("transform", `translate(0, ${200})`)
-      .call(d3.axisBottom(x).ticks(6).tickFormat(x => toMonthName(x.getMonth() + 1)))
+      .call(d3.axisBottom(x)
+        .ticks(numMonths)
+        .tickFormat(x => toMonthName(x.getMonth() + 1)))
       .attr('font-size', 5);
 
     // Add Y axis
@@ -169,7 +170,7 @@
       .attr("stroke", function (d) { return color(d[0]) })
       .attr("stroke-width", 1)
       .attr("d", function (d) {
-          return d3.line()
+        return d3.line()
           .x(function (d) {
             if (selectedLines.includes(d.MeasureName) && dict[selectedLines.findIndex(x => x === d.MeasureName)]) {
               return x(parseDate(d.Time));
@@ -224,7 +225,11 @@
         div.transition()
           .duration(200)
           .style("opacity", .9);
-        div.html(toMonthName(parseDate(d.Time).getMonth() + 1) + "&nbsp"   + toDay(parseDate(d.Time).getDate()) + "," + "&nbsp" + toYear(parseDate(d.Time).getFullYear()) + "<br/>" + Math.round(d.MeasureValue * 100) / 100 + displayUnit(d.MeasureName))
+        div.html(toMonthName(parseDate(d.Time).getMonth() + 1)
+        + "&nbsp" + toDay(parseDate(d.Time).getDate())
+        + "," + "&nbsp" + toYear(parseDate(d.Time).getFullYear())
+        + "<br/>" + Math.round(d.MeasureValue * 100) / 100
+        + displayUnit(d.MeasureName))
           .style("left", (event.pageX) + "px")
           .style("top", (event.pageY - 28) + "px");
       })
