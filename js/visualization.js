@@ -67,7 +67,7 @@
     bottom: 15
   },
     width = 500 - margin.left - margin.right,
-    height = 500 - margin.top - margin.bottom;
+    height = 325 - margin.top - margin.bottom;
 
   let color1 = "#0095CE";
   let color2 = "#C60095";
@@ -97,6 +97,15 @@
       .domain(d3.extent(data, function (d) { return parseDate(d.Time); }))
       .range([0, 300]);
 
+
+    function toYear(yearNumber) {
+      const date = new Date();
+      date.setFullYear(yearNumber);
+
+      return date.toLocaleString('en-US', {
+        year: 'numeric',
+      });
+    }
     function toMonthName(monthNumber) {
       const date = new Date();
       date.setMonth(monthNumber - 1);
@@ -104,6 +113,34 @@
       return date.toLocaleString('en-US', {
         month: 'long',
       });
+    }
+
+    function toDay(dayNumber) {
+      const date = new Date();
+      date.setDate(dayNumber);
+      return date.toLocaleString('en-US', {
+        day: 'numeric',
+      });
+    }
+
+    function displayUnit(name) {
+      if (name == "weight") {
+        return " lbs";
+      }
+      else if (name == 'blood_pressure_systolic') {
+        return " mmHg";
+      }
+      else if (name == 'blood_pressure_diastolic') {
+        return " mmHg";
+      }
+      else if (name == 'pulse') {
+        return " bpm";
+      }
+
+    }
+
+    function findTicks() {
+      
     }
 
     // Shows time and converts to a scale of months
@@ -114,7 +151,7 @@
 
     // Add Y axis
     const y = d3.scaleLinear()
-      .domain([0, d3.max(data, function (d) { return +d.MeasureValue; })])
+      .domain([0, d3.max(data, function (d) { return +d.MeasureValue + 20; })])
       .range([200, 50]);
     svg1.append("g")
       .call(d3.axisLeft(y))
@@ -187,7 +224,7 @@
         div.transition()
           .duration(200)
           .style("opacity", .9);
-        div.html(toMonthName(parseDate(d.Time).getMonth() + 1) + "<br/>" + d.MeasureValue)
+        div.html(toMonthName(parseDate(d.Time).getMonth() + 1) + "&nbsp"   + toDay(parseDate(d.Time).getDate()) + "," + "&nbsp" + toYear(parseDate(d.Time).getFullYear()) + "<br/>" + Math.round(d.MeasureValue * 100) / 100 + displayUnit(d.MeasureName))
           .style("left", (event.pageX) + "px")
           .style("top", (event.pageY - 28) + "px");
       })
