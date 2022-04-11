@@ -13,6 +13,15 @@
   // creates a box for a patient with a given color that represents risk
   var highlightedRect = d3.select(null);
 
+  var dict = [1, 1, 1, 1];
+  var curPatient = 0;
+  var curPath = '';
+  const selectedLines = ["weight", "blood_pressure_systolic", "blood_pressure_diastolic", "pulse"];
+
+  function updateChart() {
+    d3.csv(curPath).then(lineChart).then(makeTitle(curPatient));
+  }
+
   function makeCell(cellRow, cellNum, color, path) {
     svg.append("rect")
       .attr("x", 110 + (cell.widthAndStroke * cellNum))
@@ -22,7 +31,9 @@
       .attr("fill", color)
       .attr('stroke', 'black')
       .on('click', function () {
-        d3.csv(path).then(lineChart).then(makeTitle(cellNum + 1));
+        curPath = path;
+        curPatient = cellNum + 1;
+        d3.csv(path).then(lineChart).then(makeTitle(curPatient));
         highlightedRect.attr("stroke", "black")
           .attr('stroke-width', 1);
         highlightedRect = d3.select(this);
@@ -121,9 +132,23 @@
       .attr("stroke", function (d) { return color(d[0]) })
       .attr("stroke-width", 1)
       .attr("d", function (d) {
-        return d3.line()
-          .x(function (d) { return x(parseDate(d.Time)); })
-          .y(function (d) { return y(+d.MeasureValue); })
+          return d3.line()
+          .x(function (d) {
+            if (selectedLines.includes(d.MeasureName) && dict[selectedLines.findIndex(x => x === d.MeasureName)]) {
+              return x(parseDate(d.Time));
+            }
+            else {
+              return 0;
+            }
+          })
+          .y(function (d) {
+            if (selectedLines.includes(d.MeasureName) && dict[selectedLines.findIndex(x => x === d.MeasureName)]) {
+              return y(+d.MeasureValue);
+            }
+            else {
+              return 0;
+            }
+          })
           (d[1])
       })
 
@@ -134,7 +159,14 @@
       .data(data)
       .enter()
       .append("circle")
-      .attr("r", 1.1)
+      .attr("r", function (d) {
+        if (selectedLines.includes(d.MeasureName) && dict[selectedLines.findIndex(x => x === d.MeasureName)]) {
+          return 1.1;
+        }
+        else {
+          return 0;
+        }
+      })
       .attr("fill", function (d) {
         if (d.MeasureName == 'weight') {
           return color1;
@@ -263,16 +295,19 @@
     y: 200
   }
 
+  const greyColor = '#D3D3D3';
+
   // Creating large rectangle for Legend
   svg2.append('rect')
     .attr('x', legend.x)
     .attr('y', legend.y)
     .attr('height', 75)
     .attr('width', 200)
-    .style('fill', '#D3D3D3')
+    .style('fill', greyColor)
     .style("stroke", "black")
 
   // Creating the first small red rectangle
+  selected1 = true;
   svg2.append('rect')
     .attr('x', legend.x + 10)
     .attr('y', legend.y + 10)
@@ -280,6 +315,20 @@
     .attr('width', 10)
     .style('fill', color1)
     .style("stroke", "black")
+    .on('click', function (d) {
+      dict[0] = 1 - dict[0];
+      updateChart();
+      d3.select(this).style('fill', function () {
+        if (selected1) {
+          selected1 = !selected1;
+          return greyColor;
+        }
+        else {
+          selected1 = !selected1;
+          return color1;
+        }
+      });
+    });
 
   // Creating the text for the small red rectangle
   svg2.append("text")
@@ -289,14 +338,28 @@
     .text("Weight");
 
   //Creating the second rectangle (blue)
+  selected2 = true;
   svg2.append('rect')
     .attr('x', legend.x + 10)
     .attr('y', legend.y + 25)
     .attr('height', 10)
     .attr('width', 10)
     .style('fill', color2)
-    .style("stroke", "black");
-
+    .style("stroke", "black")
+    .on('click', function (d) {
+      dict[1] = 1 - dict[1];
+      updateChart();
+      d3.select(this).style('fill', function () {
+        if (selected2) {
+          selected2 = !selected2;
+          return greyColor;
+        }
+        else {
+          selected2 = !selected2;
+          return color2;
+        }
+      });
+    });
   // Creating the text for the blood pressure systolic
   svg2.append("text")
     .attr("x", legend.x + 30)
@@ -304,6 +367,7 @@
     .style('font-size', '10px')
     .text("Blood Pressure Systolic");
 
+  selected3 = true;
   svg2.append('rect')
     .attr('x', legend.x + 10)
     .attr('y', legend.y + 40)
@@ -311,6 +375,20 @@
     .attr('width', 10)
     .style('fill', color3)
     .style("stroke", "black")
+    .on('click', function (d) {
+      dict[2] = 1 - dict[2];
+      updateChart();
+      d3.select(this).style('fill', function () {
+        if (selected3) {
+          selected3 = !selected3;
+          return greyColor;
+        }
+        else {
+          selected3 = !selected3;
+          return color3;
+        }
+      });
+    });
 
   // Creating the text for the small red rectangle
   svg2.append("text")
@@ -319,6 +397,7 @@
     .style('font-size', '10px')
     .text("Blood Pressure Diastolic");
 
+  selected4 = true;
   svg2.append('rect')
     .attr('x', legend.x + 10)
     .attr('y', legend.y + 55)
@@ -326,6 +405,20 @@
     .attr('width', 10)
     .style('fill', color4)
     .style("stroke", "black")
+    .on('click', function (d) {
+      dict[3] = 1 - dict[3];
+      updateChart();
+      d3.select(this).style('fill', function () {
+        if (selected4) {
+          selected4 = !selected4;
+          return greyColor;
+        }
+        else {
+          selected4 = !selected4;
+          return color4;
+        }
+      });
+    });
 
   // Creating the text for the small red rectangle
   svg2.append("text")
