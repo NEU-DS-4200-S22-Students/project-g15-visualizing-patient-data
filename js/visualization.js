@@ -52,6 +52,68 @@
     }); */
   }
 
+  // Creates a range of colors given the two colors and how many colors in between
+function interpolateColors(color1, color2, steps) {
+  var stepFactor = 1 / (steps - 1),
+  interpolatedColorArray = [];
+  
+  color1 = color1.match(/\d+/g).map(Number);
+  color2 = color2.match(/\d+/g).map(Number);
+  
+  for(var i = 0; i < steps; i++) {
+    interpolatedColorArray.push(interpolateColor(color1, color2, stepFactor * i));
+  }
+  
+  return interpolatedColorArray;
+}
+
+  // gives the level of severity of the patient's condition based on out of bounds values
+  // Severity is based on two factors within the last two months: 
+  //    - how extreme the average of the values are 
+  //         - Average of all the values within the last two months (including current month)
+  //    - how many out of bounds vitals there are
+  //         - Systolic Blood Pressure:
+  //              - Good = <120
+  //              - Kinda Bad = >120 & <140
+  //              - Really Bad = >140 & <180
+  //              - Emergency = >180
+  //         - Diasolic Blood Pressure:
+  //              - Good = <80
+  //              - Kinda Bad = >80 & <90
+  //              - Really Bad = >90 & <110
+  //              - Emergency = >110
+
+  function determineRisk(paths) {
+    var colorArray = interpolateColors('rgb(255,0,0)', 'rgb(0,255,0)', 8);
+    var colorData = d3.csv(curPath);
+
+
+  }
+
+  var ptArray = {0: "data/patient1.csv", 1: "data/patient2.csv", 2: "data/patient3.csv", 3:"data/patient4.csv", 4:"data/patient5.csv"};
+
+  // change paths for each patient
+  for (var key in ptArray) {
+    // makeCell(1, key, determineRisk(ptArray[key]), ptArray[key]);
+  }
+
+  d3.csv("data/patient1.csv", function(data) {
+    for (var d in data) {
+      var today = new Date();
+      if (today.getMonth() == 0) {
+        console.log(parseDate(data.Time));
+        if (parseDate(d.Time).getMonth() == 0 || parseDate(d.Time).getMonth() == 11) {
+          return d;
+        }
+      } else {
+        if (parseDate(d.Time).getMonth() == today.getMonth() || parseDate(d.Time).getMonth() == today.getMonth() - 1) {
+          return d;
+        }
+      }
+    }
+    console.log(parseDate(data.Time));
+  });
+
   // change paths for each patient
   makeCell(1, 0, "#FF0000", "data/patient1.csv");
   makeCell(1, 1, "#CEFF00", "data/patient2.csv");
