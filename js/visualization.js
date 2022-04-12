@@ -117,9 +117,9 @@ function interpolateColors(color1, color2, steps) {
   // change paths for each patient
   makeCell(1, 0, "#FF0000", "data/patient1.csv");
   makeCell(1, 1, "#CEFF00", "data/patient2.csv");
-  makeCell(1, 2, "#FF9600", "data/patient3.csv");
-  makeCell(1, 3, "#9BFF00", "data/patient4.csv");
-  makeCell(1, 4, "#FF4900", "data/patient5.csv");
+  makeCell(1, 2, "#9BFF00", "data/patient3.csv");
+  makeCell(1, 3, "#FF9600", "data/patient4.csv");
+  makeCell(1, 4, "#CEFF00", "data/patient5.csv");
 
 
   let margin = {
