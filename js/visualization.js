@@ -30,15 +30,9 @@
       .attr("height", cell.height)
       .attr("fill", color)
       .attr('stroke', 'black')
+      .attr("id", cellNum)
       .on('click', function () {
-        curPath = path;
-        curPatient = cellNum + 1;
-        d3.csv(path).then(lineChart).then(makeTitle(curPatient));
-        highlightedRect.attr("stroke", "black")
-          .attr('stroke-width', 1);
-        highlightedRect = d3.select(this);
-        highlightedRect.attr("stroke", "#0066ff")
-          .attr('stroke-width', 3);
+        clickCell(path, cellNum, this);
       });
     svg.append("text")
       .attr('x', 120 + (cell.widthAndStroke * cellNum))
@@ -46,26 +40,36 @@
       .attr('font-family', 'Gill Sans')
       .style('font-size', 13)
       .text('Patient ' + (cellNum + 1))
+      .on('click', function () {
+        clickCell(path, cellNum, d3.select("rect[id='"+ cellNum + "']").nodes()[0]);
+      });
 
-    /* .on('click', function () {
-      d3.csv(path).then(lineChart).then(makeTitle(cellNum + 1));
-    }); */
+    function clickCell(path, cellNum, obj) {
+      curPath = path;
+      curPatient = cellNum + 1;
+      d3.csv(path).then(lineChart).then(makeTitle(curPatient));
+      highlightedRect.attr("stroke", "black")
+        .attr('stroke-width', 1);
+      highlightedRect = d3.select(obj);
+      highlightedRect.attr("stroke", "#0066ff")
+        .attr('stroke-width', 3);
+    }
   }
 
   // Creates a range of colors given the two colors and how many colors in between
-function interpolateColors(color1, color2, steps) {
-  var stepFactor = 1 / (steps - 1),
-  interpolatedColorArray = [];
-  
-  color1 = color1.match(/\d+/g).map(Number);
-  color2 = color2.match(/\d+/g).map(Number);
-  
-  for(var i = 0; i < steps; i++) {
-    interpolatedColorArray.push(interpolateColor(color1, color2, stepFactor * i));
+  function interpolateColors(color1, color2, steps) {
+    var stepFactor = 1 / (steps - 1),
+      interpolatedColorArray = [];
+
+    color1 = color1.match(/\d+/g).map(Number);
+    color2 = color2.match(/\d+/g).map(Number);
+
+    for (var i = 0; i < steps; i++) {
+      interpolatedColorArray.push(interpolateColor(color1, color2, stepFactor * i));
+    }
+
+    return interpolatedColorArray;
   }
-  
-  return interpolatedColorArray;
-}
 
   // gives the level of severity of the patient's condition based on out of bounds values
   // Severity is based on two factors within the last two months: 
@@ -90,14 +94,14 @@ function interpolateColors(color1, color2, steps) {
 
   }
 
-  var ptArray = {0: "data/patient1.csv", 1: "data/patient2.csv", 2: "data/patient3.csv", 3:"data/patient4.csv", 4:"data/patient5.csv"};
+  var ptArray = { 0: "data/patient1.csv", 1: "data/patient2.csv", 2: "data/patient3.csv", 3: "data/patient4.csv", 4: "data/patient5.csv" };
 
   // change paths for each patient
   for (var key in ptArray) {
     // makeCell(1, key, determineRisk(ptArray[key]), ptArray[key]);
   }
 
-  d3.csv("data/patient1.csv", function(data) {
+  d3.csv("data/patient1.csv", function (data) {
     for (var d in data) {
       var today = new Date();
       if (today.getMonth() == 0) {
@@ -115,11 +119,11 @@ function interpolateColors(color1, color2, steps) {
   });
 
   // change paths for each patient
-  makeCell(1, 0, "#FF0000", "data/patient1.csv");
-  makeCell(1, 1, "#CEFF00", "data/patient2.csv");
-  makeCell(1, 2, "#9BFF00", "data/patient3.csv");
-  makeCell(1, 3, "#FF9600", "data/patient4.csv");
-  makeCell(1, 4, "#CEFF00", "data/patient5.csv");
+  makeCell(1, 0, "#A6D96A", "data/patient1.csv");
+  makeCell(1, 1, "#FCD8B6", "data/patient2.csv");
+  makeCell(1, 2, "#DFF9C1", "data/patient3.csv");
+  makeCell(1, 3, "#FE7B4E", "data/patient4.csv");
+  makeCell(1, 4, "#C7FFA6", "data/patient5.csv");
 
 
   let margin = {
@@ -288,10 +292,10 @@ function interpolateColors(color1, color2, steps) {
           .duration(200)
           .style("opacity", .9);
         div.html(toMonthName(parseDate(d.Time).getMonth() + 1)
-        + "&nbsp" + toDay(parseDate(d.Time).getDate())
-        + "," + "&nbsp" + toYear(parseDate(d.Time).getFullYear())
-        + "<br/>" + Math.round(d.MeasureValue * 100) / 100
-        + displayUnit(d.MeasureName))
+          + "&nbsp" + toDay(parseDate(d.Time).getDate())
+          + "," + "&nbsp" + toYear(parseDate(d.Time).getFullYear())
+          + "<br/>" + Math.round(d.MeasureValue * 100) / 100
+          + displayUnit(d.MeasureName))
           .style("left", (event.pageX) + "px")
           .style("top", (event.pageY - 28) + "px");
       })
@@ -344,7 +348,7 @@ function interpolateColors(color1, color2, steps) {
 
   // Creating gradient scale for risk
 
-  var colors = ['rgb(0,255,0)', 'rgb(255,165,0)', 'rgb(255,0,0)'];
+  var colors = ['rgb(26,150,65)','rgb(166,217,106)','rgb(255,255,191)','rgb(253,174,97)','rgb(215,25,28)'];
 
   var svg2 = d3.select('#vis-svg-1');
 
