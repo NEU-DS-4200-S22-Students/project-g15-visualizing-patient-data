@@ -13,7 +13,7 @@
   // creates a box for a patient with a given color that represents risk
   var highlightedRect = d3.select(null);
 
-  var dict = [1, 1, 1, 1];
+  var dict = [1, 0, 0, 0];
   var curPatient = 0;
   var curPath = '';
   const selectedLines = ["weight", "blood_pressure_systolic", "blood_pressure_diastolic", "pulse"];
@@ -41,7 +41,7 @@
       .style('font-size', 13)
       .text('Patient ' + (cellNum + 1))
       .on('click', function () {
-        clickCell(path, cellNum, d3.select("rect[id='"+ cellNum + "']").nodes()[0]);
+        clickCell(path, cellNum, d3.select("rect[id='" + cellNum + "']").nodes()[0]);
       });
 
     function clickCell(path, cellNum, obj) {
@@ -101,7 +101,7 @@
     // makeCell(1, key, determineRisk(ptArray[key]), ptArray[key]);
   }
 
-  d3.csv("data/patient1.csv", function (data) {
+  /* d3.csv("data/patient1.csv", function (data) {
     for (var d in data) {
       var today = new Date();
       if (today.getMonth() == 0) {
@@ -116,7 +116,7 @@
       }
     }
     console.log(parseDate(data.Time));
-  });
+  }); */
 
   // change paths for each patient
   makeCell(1, 0, "#A6D96A", "data/patient1.csv");
@@ -135,7 +135,7 @@
     width = 500 - margin.left - margin.right,
     height = 325 - margin.top - margin.bottom;
 
-  let color1 = "#0095CE";
+  let color1 = "#008960";
   let color2 = "#C60095";
   let color3 = "#FF8980";
   let color4 = "#888888";
@@ -313,18 +313,28 @@
 
     // Y axis label rotated
     svg1.append("text")
-      .attr("x", -150)
+      .attr("x", -190)
       .attr('y', -30)
       .style('transform', 'rotate(-90deg)')
-      .text("Value")
-      .style('font-size', '15px')
+      .text(function () {
+        if (dict[0] == 1) {
+          return "Weight (lbs)";
+        }
+        else if (dict[1] == 1 && dict[2] == 1) {
+          return "Blood Pressure (mmHg)";
+        }
+        else if (dict[3] == 1) {
+          return "Pulse (bpm)";
+        }
+      })
+      .style('font-size', '12px');
 
     // Y axis label rotated
     svg1.append("text")
       .attr("x", 130)
       .attr('y', 230)
       .text("Date")
-      .style('font-size', '15px')
+      .style('font-size', '15px');
   }
 
   function makeTitle(patient) {
@@ -348,7 +358,7 @@
 
   // Creating gradient scale for risk
 
-  var colors = ['rgb(26,150,65)','rgb(166,217,106)','rgb(255,255,191)','rgb(253,174,97)','rgb(215,25,28)'];
+  var colors = ['rgb(26,150,65)', 'rgb(166,217,106)', 'rgb(255,255,191)', 'rgb(253,174,97)', 'rgb(215,25,28)'];
 
   var svg2 = d3.select('#vis-svg-1');
 
@@ -405,6 +415,54 @@
 
   const greyColor = '#D3D3D3';
 
+  var curVital = 1;
+
+  function selectVital(num) {
+    if (num == 1 && curVital != 1) {
+      enforceOneSelection(curVital);
+      curVital = 1;
+      dict[0] = 1 - dict[0];
+      updateChart();
+      changeColor1.call('start');
+    }
+    else if (num == 2 && curVital != 2) {
+      enforceOneSelection(curVital);
+      curVital = 2;
+      dict[1] = 1 - dict[1];
+      dict[2] = 1 - dict[2];
+      updateChart();
+      changeColor2.call('start');
+      changeColor3.call('start');
+    }
+    else if (num == 3 && curVital != 3) {
+      enforceOneSelection(curVital);
+      curVital = 3;
+      dict[3] = 1 - dict[3];
+      updateChart();
+      changeColor4.call('start');
+    }
+  }
+
+  function enforceOneSelection(num) {
+    if (num == 1) {
+      dict[0] = 1 - dict[0];
+      updateChart();
+      changeColor1.call('start');
+    }
+    else if (num == 2) {
+      dict[1] = 1 - dict[1];
+      dict[2] = 1 - dict[2];
+      updateChart();
+      changeColor2.call('start');
+      changeColor3.call('start');
+    }
+    else if (num == 3) {
+      dict[3] = 1 - dict[3];
+      updateChart();
+      changeColor4.call('start');
+    }
+  }
+
   // Creating large rectangle for Legend
   svg2.append('rect')
     .attr('x', legend.x)
@@ -416,124 +474,156 @@
 
   // Creating the first small red rectangle
   selected1 = true;
-  svg2.append('rect')
+  let rect1 = svg2.append('rect')
     .attr('x', legend.x + 10)
     .attr('y', legend.y + 10)
     .attr('height', 10)
     .attr('width', 10)
     .style('fill', color1)
-    .style("stroke", "black")
-    .on('click', function (d) {
-      dict[0] = 1 - dict[0];
-      updateChart();
-      d3.select(this).style('fill', function () {
-        if (selected1) {
-          selected1 = !selected1;
-          return greyColor;
-        }
-        else {
-          selected1 = !selected1;
-          return color1;
-        }
-      });
+    .style("stroke", '#0066ff')
+    .style('stroke-width', 2)
+    .on('click', function () {
+      selectVital(1);
     });
+
+  const changeColor1 = d3.dispatch('start');
+
+  changeColor1.on('start', function () {
+    if (selected1) {
+      selected1 = !selected1;
+      rect1.style('stroke', 'black');
+      rect1.style('stroke-width', 1);
+    }
+    else {
+      selected1 = !selected1;
+      rect1.style('stroke', '#0066ff');
+      rect1.style('stroke-width', 2);
+    };
+  });
 
   // Creating the text for the small red rectangle
   svg2.append("text")
     .attr("x", legend.x + 30)
     .attr('y', legend.y + 18)
     .style('font-size', '10px')
-    .text("Weight");
+    .text("Weight")
+    .on('click', function () {
+      selectVital(1);
+    });
 
   //Creating the second rectangle (blue)
-  selected2 = true;
-  svg2.append('rect')
+  selected2 = false;
+  let rect2 = svg2.append('rect')
     .attr('x', legend.x + 10)
     .attr('y', legend.y + 25)
     .attr('height', 10)
     .attr('width', 10)
     .style('fill', color2)
     .style("stroke", "black")
-    .on('click', function (d) {
-      dict[1] = 1 - dict[1];
-      updateChart();
-      d3.select(this).style('fill', function () {
-        if (selected2) {
-          selected2 = !selected2;
-          return greyColor;
-        }
-        else {
-          selected2 = !selected2;
-          return color2;
-        }
-      });
+    .on('click', function () {
+      selectVital(2);
     });
+
+  const changeColor2 = d3.dispatch('start');
+
+  changeColor2.on('start', function () {
+    if (selected2) {
+      selected2 = !selected2;
+      rect2.style('stroke', 'black');
+      rect2.style('stroke-width', 1);
+    }
+    else {
+      selected2 = !selected2;
+      rect2.style('stroke', '#0066ff');
+      rect2.style('stroke-width', 2);
+    };
+  });
+
   // Creating the text for the blood pressure systolic
   svg2.append("text")
     .attr("x", legend.x + 30)
     .attr('y', legend.y + 33)
     .style('font-size', '10px')
-    .text("Blood Pressure Systolic");
+    .text("Blood Pressure Systolic")
+    .on('click', function () {
+      selectVital(2);
+    });
 
-  selected3 = true;
-  svg2.append('rect')
+  selected3 = false;
+  let rect3 = svg2.append('rect')
     .attr('x', legend.x + 10)
     .attr('y', legend.y + 40)
     .attr('height', 10)
     .attr('width', 10)
     .style('fill', color3)
     .style("stroke", "black")
-    .on('click', function (d) {
-      dict[2] = 1 - dict[2];
-      updateChart();
-      d3.select(this).style('fill', function () {
-        if (selected3) {
-          selected3 = !selected3;
-          return greyColor;
-        }
-        else {
-          selected3 = !selected3;
-          return color3;
-        }
-      });
+    .on('click', function () {
+      selectVital(2);
     });
+
+  const changeColor3 = d3.dispatch('start');
+
+  changeColor3.on('start', function () {
+    if (selected3) {
+      selected3 = !selected3;
+      rect3.style('stroke', 'black');
+      rect3.style('stroke-width', 1);
+    }
+    else {
+      selected3 = !selected3;
+      rect3.style('stroke', '#0066ff');
+      rect3.style('stroke-width', 2);
+    };
+  });
 
   // Creating the text for the small red rectangle
   svg2.append("text")
     .attr("x", legend.x + 30)
     .attr('y', legend.y + 48)
     .style('font-size', '10px')
-    .text("Blood Pressure Diastolic");
+    .text("Blood Pressure Diastolic")
+    .on('click', function () {
+      selectVital(2);
+    });
 
-  selected4 = true;
-  svg2.append('rect')
+  selected4 = false;
+  let rect4 = svg2.append('rect')
     .attr('x', legend.x + 10)
     .attr('y', legend.y + 55)
     .attr('height', 10)
     .attr('width', 10)
     .style('fill', color4)
     .style("stroke", "black")
-    .on('click', function (d) {
-      dict[3] = 1 - dict[3];
-      updateChart();
-      d3.select(this).style('fill', function () {
-        if (selected4) {
-          selected4 = !selected4;
-          return greyColor;
-        }
-        else {
-          selected4 = !selected4;
-          return color4;
-        }
-      });
+    .on('click', function () {
+      selectVital(3);
     });
+
+  const changeColor4 = d3.dispatch('start');
+
+  changeColor4.on('start', function () {
+    if (selected4) {
+      selected4 = !selected4;
+      rect4.style('stroke', 'black');
+      rect4.style('stroke-width', 1);
+    }
+    else {
+      selected4 = !selected4;
+      rect4.style('stroke', '#0066ff');
+      rect4.style('stroke-width', 2);
+    };
+  });
+
+
 
   // Creating the text for the small red rectangle
   svg2.append("text")
     .attr("x", legend.x + 30)
     .attr('y', legend.y + 63)
     .style('font-size', '10px')
-    .text("Pulse");
+    .text("Pulse")
+    .on('click', function () {
+      selectVital(3);
+    });
 
   svg2.append("text")
     .attr('x', 100)
@@ -541,4 +631,11 @@
     .attr('font-family', 'Gill Sans')
     .style('font-size', 18)
     .text('Select Patient');
+
+  svg2.append("text")
+    .attr('x', 740)
+    .attr('y', 195)
+    .attr('font-family', 'Gill Sans')
+    .style('font-size', 18)
+    .text('Select Vital');
 })());
