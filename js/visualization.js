@@ -11,13 +11,13 @@
   // selecting the svg
   let svg = d3.select("#vis-svg-1");
   // shows which patient is selected
-  var highlightedRect = d3.select(null);
+  let highlightedRect = d3.select(null);
   // represents which vital is currently being shown
-  var dict = [1, 0, 0, 0];
+  let dict = [1, 0, 0, 0];
   // patient currently selected
-  var curPatient = 1;
+  let curPatient = 1;
   // current path of the data file
-  var curPath = 'data/patient1.csv';
+  let curPath = 'data/patient1.csv';
   const selectedLines = ["weight", "blood_pressure_systolic", "blood_pressure_diastolic", "pulse"];
   let margin = {
     top: 80,
@@ -253,7 +253,7 @@
       });
 
     // creating a div for the tooltip
-    var div = d3.select("body").append("div")
+    let div = d3.select("body").append("div")
       .attr("class", "tooltip")
       .style("opacity", 0);
 
@@ -320,10 +320,10 @@
   }
 
   // Creating gradient scale for risk
-  var colors = ['rgb(26,150,65)', 'rgb(166,217,106)', 'rgb(255,255,191)', 'rgb(253,174,97)', 'rgb(215,25,28)'];
-  var svg2 = d3.select('#vis-svg-1');
+  let colors = ['rgb(26,150,65)', 'rgb(166,217,106)', 'rgb(255,255,191)', 'rgb(253,174,97)', 'rgb(215,25,28)'];
+  let svg2 = d3.select('#vis-svg-1');
 
-  var grad = svg2.append('defs')
+  let grad = svg2.append('defs')
     .append('linearGradient')
     .attr('id', 'grad')
     .attr('x1', '0%')
@@ -377,7 +377,7 @@
   // deafult color
   const greyColor = '#D3D3D3';
   // current selected vital
-  var curVital = 1;
+  let curVital = 1;
 
   // updates the graph and legend according to a selected vital
   function selectVital(num) {
