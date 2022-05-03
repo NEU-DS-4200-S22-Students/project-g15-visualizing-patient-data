@@ -1,7 +1,5 @@
-# Project Template
+# Visualizing Patient Data
 
-This repository is your starting point for your project code. See the project instructions on the course website.
+Visualization tool for employees working at Medtruly.
 
 Link to your GitHub pages website: https://neu-ds-4200-s22-students.github.io/project-g15-visualizing-patient-data/
-
-https://graphicdesign.stackexchange.com/questions/83866/generating-a-series-of-colors-between-two-colors
