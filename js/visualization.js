@@ -15,9 +15,9 @@
   // represents which vital is currently being shown
   var dict = [1, 0, 0, 0];
   // patient currently selected
-  var curPatient = 0;
+  var curPatient = 1;
   // current path of the data file
-  var curPath = '';
+  var curPath = 'data/patient1.csv';
   const selectedLines = ["weight", "blood_pressure_systolic", "blood_pressure_diastolic", "pulse"];
   let margin = {
     top: 80,
@@ -27,6 +27,14 @@
   },
     width = 500 - margin.left - margin.right,
     height = 325 - margin.top - margin.bottom;
+
+  // first visualization
+  let svg1 = d3.select('#vis-svg-1')
+    .append('svg')
+    .attr('preserveAspectRatio', 'xMidYMid meet') // this will scale your visualization according to the size of its parent element and the page.
+    .attr('width', '100%') // this is now required by Chrome to ensure the SVG shows up at all
+    .style('background-color', '#ccc') // change the background color to light gray
+    .attr('viewBox', [-50, -50, width + margin.left + margin.right, height + margin.top + margin.bottom].join(' '))
 
   // risk colors
   let color1 = "#008960";
@@ -75,6 +83,9 @@
       highlightedRect.attr("stroke", "#0066ff")
         .attr('stroke-width', 3);
     }
+
+    // starting the page with patient 1 selected
+    clickCell("data/patient1.csv", 0, d3.select("rect[id='0']").nodes()[0]);
   }
 
   // adding 5 patients and their data
@@ -83,14 +94,6 @@
   makeCell(1, 2, "#DFF9C1", "data/patient3.csv");
   makeCell(1, 3, "#FE7B4E", "data/patient4.csv");
   makeCell(1, 4, "#C7FFA6", "data/patient5.csv");
-
-  // first visualization
-  let svg1 = d3.select('#vis-svg-1')
-    .append('svg')
-    .attr('preserveAspectRatio', 'xMidYMid meet') // this will scale your visualization according to the size of its parent element and the page.
-    .attr('width', '100%') // this is now required by Chrome to ensure the SVG shows up at all
-    .style('background-color', '#ccc') // change the background color to light gray
-    .attr('viewBox', [-50, -50, width + margin.left + margin.right, height + margin.top + margin.bottom].join(' '))
 
   // creates the line chart depenging on the selected vital
   function lineChart(data) {
@@ -257,7 +260,17 @@
 
     // Y axis label rotated
     svg1.append("text")
-      .attr("x", -190)
+      .attr("x", function () {
+        if (dict[0] == 1) {
+          return -160;
+        }
+        else if (dict[1] == 1 && dict[2] == 1) {
+          return -190;
+        }
+        else if (dict[3] == 1) {
+          return -158;
+        }
+      })
       .attr('y', -30)
       .attr('font-family', 'Times New Roman')
       .style('transform', 'rotate(-90deg)')
@@ -276,11 +289,11 @@
 
     // Y axis label rotated
     svg1.append("text")
-      .attr("x", 130)
+      .attr("x", 110)
       .attr('y', 230)
-      .text("Date")
+      .text("Date (Month)")
       .attr('font-family', 'Times New Roman')
-      .style('font-size', '15px');
+      .style('font-size', '13px');
   }
 
   // Creates the graph title according to the patient selected
@@ -329,7 +342,7 @@
 
   // Controls where the gradient is located on the page
   let riskgrad = {
-    x: 650,
+    x: 750,
     y: 70
   }
 
@@ -584,7 +597,7 @@
 
   // Title for patient table
   svg2.append("text")
-    .attr('x', 100)
+    .attr('x', 110)
     .attr('y', 65)
     .attr('font-family', 'Times New Roman')
     .style('font-size', 18)
@@ -592,7 +605,7 @@
 
   // Title for legned
   svg2.append("text")
-    .attr('x', 740)
+    .attr('x', 750)
     .attr('y', 195)
     .attr('font-family', 'Times New Roman')
     .style('font-size', 18)
