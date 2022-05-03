@@ -7,7 +7,7 @@
   <meta charset='utf-8'>
 
   <!-- Title -->
-  <title>G##: Topic, DS 4200 S22</title>
+  <title>G15: Visualizing Patient Data, DS 4200 S22</title>
 
   <!-- CSS Styling -->
   <link rel='stylesheet' href='style.css'>
@@ -28,16 +28,16 @@
 <body>
 
   <!-- Update this with your GitHub repo URL -->
-  <span id='forkongithub'><a href='https://github.com/NEU-DS-4200-S22/Project'>Fork me on GitHub</a></span>
+  <span id='forkongithub'><a href='https://github.com/NEU-DS-4200-S22-Students/project-g15-visualizing-patient-data/tree/gh-pages/data'>Fork me on GitHub</a></span>
 
   <!-- Writeup -->
   <div class='content-column'>
-    <h1>Project Group ##: Topic, DS 4200 S22</h1>
+    <h1>Project Group 15: Visualizing Patient Data, DS 4200 S22</h1>
 
-    <p><strong>Student One</strong>, <strong>Student Two</strong>, <strong>Student Three</strong></p>
+    <p><strong>William Hoch</strong>, <strong>Lucas Jang</strong>, <strong>Justin Wu</strong></p>
 
     <p>Service-Learning Course Project as part of
-      <a href='https://neu-ds-4200-s22.github.io/'>Ds 4200 S22 Information Presentation & Visualization</a>,
+      <a href='https://neu-ds-4200-s22.github.io/'>DS 4200 S22 Information Presentation & Visualization</a>,
       taught by <a href='https://cody.khoury.northeastern.edu/'>Prof. Cody Dunne</a>,
       <a href='https://visualization.khoury.northeastern.edu/'>Data Visualization @ Khoury</a>,
       <a href='https://www.khoury.northeastern.edu/'>Northeastern University</a>.
@@ -46,12 +46,21 @@
 
     <h1>Abstract</h1>
 
-    <p>Include a brief writeup about your project.</p>
+    <p>When meeting with our partner, one of their most pressing issues was the inaccessibility of patient information which affected 
+      the workflow and efficiency of the LifeStyle Coaches. Their LifeStyle Coaches were having a difficult time organizing and prioritizing 
+      which patients required the most attention, especially when their number of patients reached upwards of twenty pateints. The information 
+      they needed was spread across multiple places which made it much more problematic to access than needed. So when we went about
+      trying to create our visualization, we asked how we could best show all the necessary information and centralize patient 
+      information in a format that is easy to understand by both professionals and non-professionals. As a result, we came up with an 
+      interactive visualization that would be unique for each LifeStyle Coach. Each LifeStyle Coach would have their own visualization that 
+      would contain only their patients and their information. In addition, the user would be able to apply a filter to the patients list to 
+      display the most at risk patients for specific health measurements. 
+    </p>
 
 
     <h1>Visualization</h1>
 
-    <p>Include the interactive visualization as part of this page. Static example follows.</p>
+    <p></p>
 
 
   </div>
@@ -60,13 +69,7 @@
   <div class='vis-holder'>
     <!-- Change viewbox to whatever you want, e.g., '0 0 1000 6000' This determines your aspect ratio and coordinate system -->
     <!-- Delete all the sample SVG code below after the viewbox to before the closing tag. Populate this part of the SVG with D3. -->
-    <svg id='vis-svg-1' preserveAspectRatio='xMidYMid meet' class='vis-svg' viewBox='0 0 1000 1000' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'>
-
-
-      <text x='30%' y='35%' text-anchor='middle'>A</text>
-      <text x='70%' y='35%' text-anchor='middle'>B</text>
-      <rect x='20%' y='40%' width='20%' height='20%' fill='yellow'></rect>
-      <circle cx='70%' cy='50%' r='10%' fill='blue'></circle>
+    <svg id='vis-svg-1' preserveAspectRatio='xMidYMid meet' class='vis-svg' viewBox='0 0 1000 600' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'>
 
 
       <!-- Don't delete the closing tag! -->
@@ -78,23 +81,26 @@
 
     <h1>Visualization explanation</h1>
 
-    <p>Replace with a brief explanation and linked presentation slides.</p>
-
+    <p>For our visualization, we decided to create a centralized space for Lifestyle Coaches to view their patient data. 
+      So, we created a selectable interface for LCs to click on which respective patient they want to see. 
+      Firstly, the patient boxes are unique and are encoded by a diverging color scale, where green identifies a healthy patient, 
+      and red indicates a high risk. We positioned the visualization such that it fits the entire screen.</p>
+      <p>After receiving feedback about our patient vital line charts, we decided to show weight by default. There is 
+        also a smaller panel that allows the LCs to filter for specific vital charts. Whenever the filter is selected for 
+        any vital, the units will dynamically change. In addition, there is a tooltip where LCs can see the exact date of the 
+        measurement as well as the exact value. In the line chart, each specific measurement is pronounced by having dot points 
+        for each measurement. </p>
+    <a href="https://docs.google.com/presentation/d/1BZPL2Pi5s2za4kUMPSCPL12m3D51D54KQcwV8VCkUBI/edit?usp=sharing"> Link to Presentation!</a>
+    
     <h1>Demo Video</h1>
 
-    <p>Embed an MP4 demo video using the HTML5 &lt;video&gt; tag. For example, this screen recording Prof. Cody Dunne made of Mike Bostock's flexible transitions in D3 slide:</p>
-
     <video controls width='100%'>
-      <source src='http://www.ccs.neu.edu/home/cody/courses/shared/d3-flexible-transitions.mp4' type='video/mp4'>
+      <source src='Visualizing Patient Data Demo.mp4' type='video/mp4'>
       <p>Your browser doesn't support HTML5 video. Here is
-        a <a href='http://www.ccs.neu.edu/home/cody/courses/shared/d3-flexible-transitions.mp4'>link to the video</a> instead.</p>
+        a <a href='https://drive.google.com/file/d/1eqcT-HlZ7zSFWNdoXzPiFEXU9XuRgXt1/view?usp=sharing'>link to the video</a> instead.</p>
     </video>
 
     <h1>Acknowledgments</h1>
-
-    <p>
-      List here where any code, packages/libraries, text, images, designs, etc. that you leverage come from.
-    </p>
 
     <ul>
       <li><a href='https://d3js.org/'>
@@ -105,6 +111,14 @@
           Pure CSS responsive 'Fork me on GitHub' ribbon</a>
         by Chris Heilmann is used to create the banner that links back to the source code repository.
       </li>
+      <li><a href='https://www.d3-graph-gallery.com/graph/line_several_group.html'>
+        Line plot with several groups</a>
+      by Yan Holtz is used to create the line chart.
+    </li>
+      <li><a href='https://bl.ocks.org/d3noob/180287b6623496dbb5ac4b048813af52'>
+        Simple Tooltips in v6</a>
+      by d3noob is used to create interactive tooltips in line chart.
+    </li>
     </ul>
   </div>
 
